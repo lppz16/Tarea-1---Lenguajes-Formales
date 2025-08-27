@@ -1,15 +1,6 @@
-Tarea #1 de lenguajes formales
-Estudiantes: Diego Alejandro Angarita Arboleda, Yan Frank Ríos López
-Sistema operativo: windows 11
-lenguaje de programacion: python
-Numero de clase: C2566-SI2002-5730
-
-Intrucciones:
-Con el finde de brindar una mayor comodidad para correr el programa se recomienda descargar PycHarm (https://www.jetbrains.com/es-es/pycharm/download/?section=windows) o usar herramientas online como replit (https://replit.com/)
-
 # 📘 Tarea 1 – Minimización de DFA
 
-**Curso:** ST0270 – Lenguajes Formales y Compiladores  
+**Curso:** ST0270 – Lenguajes Formales  
 **Tarea:** #1  
 **Estudiantes:**  
 - Diego Alejandro Angarita Arboleda  
@@ -46,8 +37,10 @@ Para cada caso, el programa imprime los **pares de estados equivalentes** en ord
 ---
 
 ## ▶️ Instrucciones de Ejecución
+Con el finde de brindar una mayor comodidad para correr el programa se recomienda descargar PycHarm (https://www.jetbrains.com/es-es/pycharm/download/?section=windows) o usar herramientas online como replit (https://replit.com/)
 
 ### 1. Clonar el repositorio
 ```bash
 git clone <tu-url-del-repo>
 cd <carpeta-del-repo>
+
