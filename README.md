@@ -1,46 +1,46 @@
-# 📘 Tarea 1 – Minimización de DFA
+# 📘 Assignment 1 – DFA Minimization
 
-**Curso:** ST0270 – Lenguajes Formales  
-**Tarea:** #1  
-**Estudiantes:**  
+**Course:** ST0270 – Formal Languages  
+**Assignment:** #1  
+**Students:**  
 - Diego Alejandro Angarita Arboleda  
 - Yan Frank Ríos López  
-**Número de clase:** C2566-SI2002-5730  
-**Sistema operativo:** Windows 11  
-**Lenguaje de programación:** Python 3  
+**Class number:** C2566-SI2002-5730  
+**Operating System:** Windows 11  
+**Programming Language:** Python 3  
 
 ---
 
-## 📌 Descripción
-Este proyecto implementa el **algoritmo de minimización de autómatas finitos deterministas (DFA)** presentado en *Kozen (1997), Lecture 14*.  
-El programa recibe como entrada la definición de un DFA (sin estados inaccesibles) y determina los **estados equivalentes** que pueden ser colapsados.  
-Finalmente, imprime los pares de estados equivalentes en orden lexicográfico.  
+## 📌 Description  
+This project implements the **deterministic finite automata (DFA) minimization algorithm** presented in *Kozen (1997), Lecture 14*.  
+The program takes as input the definition of a DFA (without unreachable states) and determines the **equivalent states** that can be merged.  
+Finally, it prints the pairs of equivalent states in lexicographic order.  
 
 ---
 
-## 📥 Formato de Entrada
-1. Una línea con un número `c > 0` indicando la cantidad de casos de prueba.  
-2. Para cada caso:
-   - Una línea con `n > 0`, el número de estados del DFA.  
-   - Una línea con los símbolos del alfabeto separados por espacios.  
-   - Una línea con los estados finales separados por espacios.  
-   - `n` líneas, cada una describiendo una fila de la tabla de transiciones para un estado.  
-     Los símbolos aparecen en el mismo orden que se listaron en la línea del alfabeto.  
+## 📥 Input Format  
+1. One line with a number `c > 0` indicating the number of test cases.  
+2. For each case:  
+   - One line with `n > 0`, the number of DFA states.  
+   - One line with the alphabet symbols separated by spaces.  
+   - One line with the final states separated by spaces.  
+   - `n` lines, each describing a row of the transition table for a state.  
+     The symbols appear in the same order as they were listed in the alphabet line.  
 
 ---
 
-## 📤 Formato de Salida
-Para cada caso, el programa imprime los **pares de estados equivalentes** en orden lexicográfico.  
-- Los pares se imprimen como `(p,q)` separados por espacios.  
-- Si no hay pares equivalentes, se imprime una línea vacía.  
+## 📤 Output Format  
+For each case, the program prints the **pairs of equivalent states** in lexicographic order.  
+- The pairs are printed as `(p,q)` separated by spaces.  
+- If there are no equivalent pairs, a blank line is printed.  
 
 ---
 
-## ▶️ Instrucciones de Ejecución
-Con el finde de brindar una mayor comodidad para correr el programa se recomienda descargar PycHarm (https://www.jetbrains.com/es-es/pycharm/download/?section=windows) o usar herramientas online como replit (https://replit.com/)
+## ▶️ Execution Instructions  
+To make running the program easier, it is recommended to download PyCharm (https://www.jetbrains.com/pycharm/download/?section=windows) or use online tools such as Replit (https://replit.com/).  
 
-### 1. Clonar el repositorio
+### 1. Clone the repository  
 ```bash
-git clone <tu-url-del-repo>
-cd <carpeta-del-repo>
+git clone <your-repo-url>
+cd <repo-folder>
 
