@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 """
-Left Recursion Elimination Algorithm
-Based on Aho et al. 2006, Section 4.3.3, Algorithm 4.19
+ST0270 - Formal Languages and Compilers
+Assignment 2 - Left Recursion Elimination
+Author: Yan Frank Ríos López & Diego Alejandro Angarita Arboleda
+Based on Aho et al. (2006) - Compilers: Principles, Techniques, and Tools
 """
 
 def parse_grammar(lines):
     """
     Parse grammar from input lines.
     Returns: dict mapping nonterminal -> list of production alternatives
+    Each production is now a LIST of symbols instead of a string
     """
     grammar = {}
     for line in lines:
@@ -17,15 +20,17 @@ def parse_grammar(lines):
         
         parts = line.split('->')
         nonterminal = parts[0].strip()
-        productions = parts[1].strip().split()
+        # Split productions by space - each production is a list of symbols
+        production_strings = parts[1].strip().split()
         
-        grammar[nonterminal] = productions
+        # Convert to list of lists (each production is a list of symbols)
+        grammar[nonterminal] = [list(prod) for prod in production_strings]
     
     return grammar
 
 
 def is_nonterminal(symbol):
-    """Check if a symbol is a nonterminal (uppercase letter)"""
+    """Check if a symbol is a nonterminal (uppercase letter or multi-char uppercase)"""
     return symbol and symbol[0].isupper()
 
 
@@ -35,7 +40,7 @@ def has_immediate_left_recursion(nonterminal, productions):
     Immediate left recursion: A -> Aα
     """
     for prod in productions:
-        if prod and prod[0] == nonterminal:
+        if prod and len(prod) > 0 and prod[0] == nonterminal:
             return True
     return False
 
@@ -57,7 +62,7 @@ def eliminate_immediate_left_recursion(nonterminal, productions, used_nontermina
     non_recursive = []  # Productions not starting with A (A -> β)
     
     for prod in productions:
-        if prod and prod[0] == nonterminal:
+        if prod and len(prod) > 0 and prod[0] == nonterminal:
             # Remove the leading nonterminal to get α
             alpha = prod[1:]
             recursive.append(alpha)
@@ -70,7 +75,7 @@ def eliminate_immediate_left_recursion(nonterminal, productions, used_nontermina
     
     # If all productions are recursive (no β), this shouldn't happen with valid input
     if not non_recursive:
-        non_recursive = ['e']  # Add epsilon
+        non_recursive = [['e']]  # Add epsilon as a list
     
     # Find a new nonterminal name
     new_nonterminal = get_new_nonterminal(used_nonterminals)
@@ -80,13 +85,21 @@ def eliminate_immediate_left_recursion(nonterminal, productions, used_nontermina
     # A -> β₁A' | β₂A' | ... | βₙA'
     new_A_productions = []
     for beta in non_recursive:
-        new_A_productions.append(beta + new_nonterminal)
+        # FIXED: Handle epsilon correctly
+        if beta == ['e']:  # If beta is epsilon
+            new_A_productions.append([new_nonterminal])
+        else:
+            new_A_productions.append(beta + [new_nonterminal])
     
     # A' -> α₁A' | α₂A' | ... | αₘA' | ε
     new_prime_productions = []
     for alpha in recursive:
-        new_prime_productions.append(alpha + new_nonterminal)
-    new_prime_productions.append('e')  # Add epsilon
+        # FIXED: Handle epsilon correctly
+        if alpha == ['e']:  # If alpha is epsilon
+            new_prime_productions.append([new_nonterminal])
+        else:
+            new_prime_productions.append(alpha + [new_nonterminal])
+    new_prime_productions.append(['e'])  # Add epsilon as a list
     
     result = {
         nonterminal: new_A_productions,
@@ -121,13 +134,14 @@ def substitute_productions(target_nt, source_nt, source_productions, target_prod
     """
     Substitute a nonterminal in a production.
     
-    If target_production is "Aⱼγ", replace it with "δ₁γ | δ₂γ | ... | δₖγ"
+    If target_production is [Aⱼ, γ₁, γ₂, ...], replace it with:
+    [δ₁, γ₁, γ₂, ...] | [δ₂, γ₁, γ₂, ...] | ... | [δₖ, γ₁, γ₂, ...]
     where Aⱼ -> δ₁ | δ₂ | ... | δₖ
     
     Returns: list of new productions
     """
     # Check if production starts with source_nt
-    if not target_production or target_production[0] != source_nt:
+    if not target_production or len(target_production) == 0 or target_production[0] != source_nt:
         return [target_production]
     
     # Get γ (everything after source_nt)
@@ -136,7 +150,11 @@ def substitute_productions(target_nt, source_nt, source_productions, target_prod
     # Create new productions by substituting
     new_productions = []
     for delta in source_productions:
-        new_productions.append(delta + gamma)
+        # FIXED: Handle epsilon correctly
+        if delta == ['e']:  # If delta is epsilon
+            new_productions.append(gamma)
+        else:
+            new_productions.append(delta + gamma)
     
     return new_productions
 
@@ -173,7 +191,7 @@ def eliminate_left_recursion(grammar):
             # Step 4: Replace each production of the form A_i -> A_j γ
             new_productions = []
             for production in grammar[A_i]:
-                if production and production[0] == A_j:
+                if production and len(production) > 0 and production[0] == A_j:
                     # Substitute A_j with its productions
                     substituted = substitute_productions(A_j, A_j, grammar[A_j], production)
                     new_productions.extend(substituted)
@@ -206,7 +224,8 @@ def format_output(grammar):
     new_nts = []
     
     for nt in grammar.keys():
-        if len(nt) == 1 and nt in 'SABCDEFGHIJKLMNOPQRTUVWXYZ':
+        # FIXED: Added missing 'P' in alphabet
+        if len(nt) == 1 and nt in 'SABCDEFGHIJKLMNOPQRSTUVWXYZ':
             if nt == 'S':
                 original_nts.insert(0, nt)
             else:
@@ -222,7 +241,8 @@ def format_output(grammar):
     
     for nt in all_nts:
         if nt in grammar:
-            productions = ' '.join(grammar[nt])
+            # Convert list of symbol lists back to space-separated strings
+            productions = ' '.join([''.join(prod) for prod in grammar[nt]])
             output_lines.append(f"{nt} -> {productions}")
     
     return '\n'.join(output_lines)
@@ -236,7 +256,7 @@ def main():
     is_interactive = sys.stdin.isatty()
     
     if is_interactive:
-        print("=== Left Recursion Elimination Algorithm ===")
+        print("=== Left Recursion Elimination Algorithm (CORRECTED) ===")
         print("Based on Aho et al. 2006, Section 4.3.3\n")
     
     # Read number of cases
