@@ -34,10 +34,10 @@ A → βZ
 Z → αZ | e
 
 ### 🧰 System Information
-- **Operating System:** Ubuntu 22.04 / Windows 10  
+- **Operating System:** Windows 11  
 - **Python Version:** 3.11  
 - **Editor:** Visual Studio Code  
-- **Execution Environment:** GitHub Classroom
+- **Execution Environment:** Windows terminal
 
 
 Here, **`e`** represents the empty string (ε).  
